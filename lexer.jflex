@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 %column
 %cup
 %char
+%caseless
 %{
 	
 
@@ -80,48 +81,109 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 %%  
 
     /* keywords: https://www.w3.org/TR/1998/NOTE-compactHTML-19980209/*/
-    <YYINITIAL> "!-"           {return symbolFactory.newSymbol("!-", !-); }
-    <YYINITIAL> "!DOCTYPE"     {return symbolFactory.newSymbol("!DOCTYPE", !DOCTYPE); }
-    <YYINITIAL> "&xxx"         {return symbolFactory.newSymbol("&xxx", &xxx); }
-    <YYINITIAL> "A"            {return symbolFactory.newSymbol("A", A); }
-    <YYINITIAL> "BASE"         {return symbolFactory.newSymbol("BASE", BASE); }
-    <YYINITIAL> "BLOCKQUOTE"   {return symbolFactory.newSymbol("BLOCKQUOTE", BLOCKQUOTE); }
-    <YYINITIAL> "BODY"         {return symbolFactory.newSymbol("BODY", BODY); }
-    <YYINITIAL> "BR"           {return symbolFactory.newSymbol("BR", BR); }
-    <YYINITIAL> "BUTTON"       {return symbolFactory.newSymbol("BUTTON", BUTTON); }
-    <YYINITIAL> "CENTER"       {return symbolFactory.newSymbol("CENTER", CENTER); }
-    <YYINITIAL> "DD"           {return symbolFactory.newSymbol("DD", DD); }
-    <YYINITIAL> "DIR"          {return symbolFactory.newSymbol("DIR", DIR); }
-    <YYINITIAL> "DIV"          {return symbolFactory.newSymbol("DIV", DIV); }
-    <YYINITIAL> "DL"           {return symbolFactory.newSymbol("DL", DL); }
-    <YYINITIAL> "DT"           {return symbolFactory.newSymbol("DT", DT); }
-    <YYINITIAL> "FORM"         {return symbolFactory.newSymbol("FORM", FORM); }
-    <YYINITIAL> "HEAD"         {return symbolFactory.newSymbol("HEAD", HEAD); }
-    <YYINITIAL> "H1"           {return symbolFactory.newSymbol("H1", H1); }
-    <YYINITIAL> "H2"           {return symbolFactory.newSymbol("H2", H2); }
-    <YYINITIAL> "H3"           {return symbolFactory.newSymbol("H3", H3); }
-    <YYINITIAL> "H4"           {return symbolFactory.newSymbol("H4", H4); }
-    <YYINITIAL> "H5"           {return symbolFactory.newSymbol("H5", H5); }
-    <YYINITIAL> "H6"           {return symbolFactory.newSymbol("H6", H6); }
-    <YYINITIAL> "HR"           {return symbolFactory.newSymbol("HR", HR); }
-    <YYINITIAL> "HTML"         {return symbolFactory.newSymbol("HTML", HTML); }
-    <YYINITIAL> "IMG"          {return symbolFactory.newSymbol("IMG", IMG); }
-    <YYINITIAL> "INPUT"        {return symbolFactory.newSymbol("INPUT", INPUT); }
-    <YYINITIAL> "LI"           {return symbolFactory.newSymbol("LI", LI); }
-    <YYINITIAL> "MENU"         {return symbolFactory.newSymbol("MENU", MENU); }
-    <YYINITIAL> "META"         {return symbolFactory.newSymbol("META", META); }
-    <YYINITIAL> "OL"           {return symbolFactory.newSymbol("OL", OL); }
-    <YYINITIAL> "OPTION"       {return symbolFactory.newSymbol("OPTION", OPTION); }
-    <YYINITIAL> "P"            {return symbolFactory.newSymbol("P", P); }
-    <YYINITIAL> "PLAINTEXT"    {return symbolFactory.newSymbol("PLAINTEXT", PLAINTEXT); }
-    <YYINITIAL> "PRE"          {return symbolFactory.newSymbol("PRE", PRE); }
-    <YYINITIAL> "SELECT"       {return symbolFactory.newSymbol("SELECT", SELECT); }
-    <YYINITIAL> "SCRIPT"       {return symbolFactory.newSymbol("SCRIPT", SCRIPT); }
-    <YYINITIAL> "STYLE"        {return symbolFactory.newSymbol("STYLE", STYLE); }
-    <YYINITIAL> "SPAN"         {return symbolFactory.newSymbol("SPAN", SPAN); }
-    <YYINITIAL> "TEXTAREA"     {return symbolFactory.newSymbol("TEXTAREA", TEXTAREA); }
-    <YYINITIAL> "TITLE"        {return symbolFactory.newSymbol("TITLE", TITLE); }
-    <YYINITIAL> "UL"           {return symbolFactory.newSymbol("UL", UL); }
+    /*directiva prin care sa fie ignorat cae*/
+    <YYINITIAL> {
+      {Whitespace}    {                              }
+      "!-"           {return symbolFactory.newSymbol("!-", !-); }
+      "!DOCTYPE"     {return symbolFactory.newSymbol("!DOCTYPE", !DOCTYPE); }
+      "&xxx"         {return symbolFactory.newSymbol("&xxx", &xxx); }
+      "A"            {return symbolFactory.newSymbol("A", A); }
+      "ABBR"         {return symbolFactory.newSymbol("ABBR", ABBR); }
+      "ACRONYM"      {return symbolFactory.newSymbol("ACRONYM", ACRONYM); }
+      "ADDRESS"      {return symbolFactory.newSymbol("ADDRESS", ADDRESS); }
+      "APPLET"       {return symbolFactory.newSymbol("APPLET", APPLET); }
+      "AREA"         {return symbolFactory.newSymbol("AREA", AREA); }
+      "B"            {return symbolFactory.newSymbol("B", B); }
+      "BASE"         {return symbolFactory.newSymbol("BASE", BASE); }
+      "BASEFONT"     {return symbolFactory.newSymbol("BASEFONT", BASEFONT); }
+      "BDO"          {return symbolFactory.newSymbol("BDO", BDO); }
+      "BIG"          {return symbolFactory.newSymbol("BIG", BIG); }
+      "BLOCKQUOTE"   {return symbolFactory.newSymbol("BLOCKQUOTE", BLOCKQUOTE); }
+      "BODY"         {return symbolFactory.newSymbol("BODY", BODY); }
+      "BR"           {return symbolFactory.newSymbol("BR", BR); }
+      "BUTTON"       {return symbolFactory.newSymbol("BUTTON", BUTTON); }
+      "CAPTION"      {return symbolFactory.newSymbol("CAPTION", CAPTION); }
+      "CENTER"       {return symbolFactory.newSymbol("CENTER", CENTER); }
+      "CITE"         {return symbolFactory.newSymbol("CITE", CITE); }
+      "CODE"         {return symbolFactory.newSymbol("CODE", CODE); }
+      "COL"          {return symbolFactory.newSymbol("COL", COL); }
+      "COLGROUP"     {return symbolFactory.newSymbol("COLGROUP", COLGROUP); }
+      "DD"           {return symbolFactory.newSymbol("DD", DD); }
+      "DEL"          {return symbolFactory.newSymbol("DEL", DEL); }
+      "DFN"          {return symbolFactory.newSymbol("DFN", DFN); }
+      "DIR"          {return symbolFactory.newSymbol("DIR", DIR); }
+      "DIV"          {return symbolFactory.newSymbol("DIV", DIV); }
+      "DL"           {return symbolFactory.newSymbol("DL", DL); }
+      "DT"           {return symbolFactory.newSymbol("DT", DT); }
+      "EM"           {return symbolFactory.newSymbol("EM", EM); }
+      "FIELDSET"     {return symbolFactory.newSymbol("FIELDSET", FIELDSET); }
+      "FONT"         {return symbolFactory.newSymbol("FONT", FONT); }
+      "FORM"         {return symbolFactory.newSymbol("FORM", FORM); }
+      "FRAME"        {return symbolFactory.newSymbol("FRAME", FRAME); }
+      "FRAMESET"     {return symbolFactory.newSymbol("FRAMESET", FRAMESET); }
+      "HEAD"         {return symbolFactory.newSymbol("HEAD", HEAD); }
+      "H1"           {return symbolFactory.newSymbol("H1", H1); }
+      "H2"           {return symbolFactory.newSymbol("H2", H2); }
+      "H3"           {return symbolFactory.newSymbol("H3", H3); }
+      "H4"           {return symbolFactory.newSymbol("H4", H4); }
+      "H5"           {return symbolFactory.newSymbol("H5", H5); }
+      "H6"           {return symbolFactory.newSymbol("H6", H6); }
+      "HR"           {return symbolFactory.newSymbol("HR", HR); }
+      "HTML"         {return symbolFactory.newSymbol("HTML", HTML); }
+      "I"            {return symbolFactory.newSymbol("I", I); }
+      "IFRAME"       {return symbolFactory.newSymbol("IFRAME", IFRAME); }
+      "IMG"          {return symbolFactory.newSymbol("IMG", IMG); }
+      "INPUT"        {return symbolFactory.newSymbol("INPUT", INPUT); }
+      "INS"          {return symbolFactory.newSymbol("INS", INS); }
+      "ISINDEX"      {return symbolFactory.newSymbol("ISINDEX", ISINDEX); }
+      "KBD"          {return symbolFactory.newSymbol("KBD", KBD); }
+      "LABEL"        {return symbolFactory.newSymbol("LABEL", LABEL); }
+      "LEGEND"       {return symbolFactory.newSymbol("LEGEND", LEGEND); }
+      "LI"           {return symbolFactory.newSymbol("LI", LI); }
+      "LINK"         {return symbolFactory.newSymbol("LINK", LINK); }
+      "LISTING"      {return symbolFactory.newSymbol("LISTING", LISTING); }
+      "MAP"          {return symbolFactory.newSymbol("MAP", MAP); }
+      "MENU"         {return symbolFactory.newSymbol("MENU", MENU); }
+      "META"         {return symbolFactory.newSymbol("META", META); }
+      "NEXTID"       {return symbolFactory.newSymbol("NEXTID", NEXTID); }
+      "NOFRAMES"     {return symbolFactory.newSymbol("NOFRAMES", NOFRAMES); }
+      "NOSCRIPT"     {return symbolFactory.newSymbol("NOSCRIPT", NOSCRIPT); }
+      "OBJECT"       {return symbolFactory.newSymbol("OBJECT", OBJECT); }
+      "OL"           {return symbolFactory.newSymbol("OL", OL); }
+      "OPTGROUP"     {return symbolFactory.newSymbol("OPTGROUP", OPTGROUP); }
+      "OPTION"       {return symbolFactory.newSymbol("OPTION", OPTION); }
+      "P"            {return symbolFactory.newSymbol("P", P); }
+      "PARAM"        {return symbolFactory.newSymbol("PARAM", PARAM); }
+      "PLAINTEXT"    {return symbolFactory.newSymbol("PLAINTEXT", PLAINTEXT); }
+      "PRE"          {return symbolFactory.newSymbol("PRE", PRE); }
+      "Q"            {return symbolFactory.newSymbol("Q", Q); }
+      "S"            {return symbolFactory.newSymbol("S", S); }
+      "SAMP"         {return symbolFactory.newSymbol("SAMP", SAMP); }
+      "SELECT"       {return symbolFactory.newSymbol("SELECT", SELECT); }
+      "SCRIPT"       {return symbolFactory.newSymbol("SCRIPT", SCRIPT); }
+      "SMALL"        {return symbolFactory.newSymbol("SMALL", SMALL); }
+      "SPAN"         {return symbolFactory.newSymbol("SPAN", SPAN); }
+      "STRIKE"       {return symbolFactory.newSymbol("STRIKE", STRIKE); }
+      "STRONG"       {return symbolFactory.newSymbol("STRONG", STRONG); }
+      "STYLE"        {return symbolFactory.newSymbol("STYLE", STYLE); }
+      "SUB"          {return symbolFactory.newSymbol("SUB", SUB); }
+      "SUP"          {return symbolFactory.newSymbol("SUP", SUP); }
+      "SPAN"         {return symbolFactory.newSymbol("SPAN", SPAN); }
+      "TABLE"        {return symbolFactory.newSymbol("TABLE", TABLE); }
+      "TBODY"        {return symbolFactory.newSymbol("TBODY", TBODY); }
+      "TD"           {return symbolFactory.newSymbol("TD", TD); }
+      "TEXTAREA"     {return symbolFactory.newSymbol("TEXTAREA", TEXTAREA); }
+      "TFOOT"        {return symbolFactory.newSymbol("TFOOT", TFOOT); }
+      "TH"           {return symbolFactory.newSymbol("TH", TH); }
+      "THEAD"        {return symbolFactory.newSymbol("THEAD", THEAD); }
+      "TITLE"        {return symbolFactory.newSymbol("TITLE", TITLE); }
+      "TR"           {return symbolFactory.newSymbol("TR", TR); }
+      "TT"           {return symbolFactory.newSymbol("TT", TT); }
+      "U"            {return symbolFactory.newSymbol("U", U); }
+      "UL"           {return symbolFactory.newSymbol("UL", UL); }
+      "VAR"          {return symbolFactory.newSymbol("VAR", VAR); }
+      "XMP"          {return symbolFactory.newSymbol("XMP", XMP); }
+    }
 
 
     <YYINITIAL> {
@@ -155,3 +217,4 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
     /* error fallback */
     [^]                              { throw new Error("Illegal character <"+
                                                         yytext()+">"); }
+    <<EOF>>                          { return symbol(EOF); }

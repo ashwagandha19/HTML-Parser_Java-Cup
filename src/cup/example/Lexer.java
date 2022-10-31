@@ -653,6 +653,7 @@ public class Lexer implements sym, java_cup.runtime.Scanner {
           yy_state = yy_next;
 
           int yy_attributes = yy_attr_l[yy_state];
+          System.out.println("THE yy_state is" + " " + yy_state);
           if ( (yy_attributes & 1) == 1 ) {
             yy_action = yy_state; 
             yy_markedPos_l = yy_currentPos_l; 
@@ -665,52 +666,54 @@ public class Lexer implements sym, java_cup.runtime.Scanner {
       // store back cached position
       yy_markedPos = yy_markedPos_l;
 
-      switch (yy_action) {
-
-        case 5: 
-          {  return symbolFactory.newSymbol("NUMBER", NUMBER, Integer.parseInt(yytext()));  }
-        case 14: break;
-        case 7: 
-          {  return symbolFactory.newSymbol("SEMI", SEMI);  }
-        case 15: break;
-        case 8: 
-          {  return symbolFactory.newSymbol("PLUS", PLUS);  }
-        case 16: break;
-        case 3: 
-        case 4: 
-          {                                }
-        case 17: break;
-        case 6: 
-          {  return symbolFactory.newSymbol("TIMES", TIMES);  }
-        case 18: break;
-        case 9: 
-          {  return symbolFactory.newSymbol("MINUS", MINUS);  }
-        case 19: break;
-        case 2: 
-          {  emit_warning("Unrecognized character '" +yytext()+"' -- ignored");  }
-        case 20: break;
-        case 12: 
-          {  return symbolFactory.newSymbol("RPAREN", RPAREN);  }
-        case 21: break;
-        case 11: 
-          {  return symbolFactory.newSymbol("LPAREN", LPAREN);  }
-        case 22: break;
-        case 10: 
-          {  return symbolFactory.newSymbol("UMINUS", UMINUS);  }
-        case 23: break;
-        default: 
-          if (yy_input == YYEOF && yy_startRead == yy_currentPos) {
-            yy_atEOF = true;
-            yy_do_eof();
-              {     return symbolFactory.newSymbol("EOF",sym.EOF);
- }
-          } 
-          else {
-            yy_ScanError(YY_NO_MATCH);
-          }
-      }
-    }
+   System.out.println("THE yy_action is" + " " + yy_action);
+   switch (yy_action) {
+	   	 case 5: 
+		   {  return symbolFactory.newSymbol("NUMBER", NUMBER, Integer.parseInt(yytext()));  }
+		 case 14: break;
+		 case 7: 
+		   {  return symbolFactory.newSymbol("SEMI", SEMI);  }
+		 case 15: break;
+		 case 8: 
+		   {  return symbolFactory.newSymbol("PLUS", PLUS);  }
+		 case 16: break;
+		 case 3: 
+		 case 4: 
+		   {                                }
+		 case 17: break;
+		 case 6: 
+		   {  return symbolFactory.newSymbol("TIMES", TIMES);  }
+		 case 18: break;
+		 case 9: 
+		   {  return symbolFactory.newSymbol("MINUS", MINUS);  }
+		 case 19: break;
+		 case 2: 
+		   {  emit_warning("Unrecognized character '" +yytext()+"' -- ignored");  }
+		 case 20: break;
+		 case 12: 
+		   {  return symbolFactory.newSymbol("RPAREN", RPAREN);  }
+		 case 21: break;
+		 case 11: 
+		   {  return symbolFactory.newSymbol("LPAREN", LPAREN);  }
+		 case 22: break;
+		 case 10: 
+		   {  return symbolFactory.newSymbol("UMINUS", UMINUS);  }
+		 case 23: break;
+    default: 
+        if (yy_input == YYEOF && yy_startRead == yy_currentPos) {
+          yy_atEOF = true;
+          System.out.println("ON DEFAULT IF");
+          yy_do_eof();
+            {     return symbolFactory.newSymbol("EOF", EOF);
+            }
+        } 
+        else {
+          System.out.println("ON DEFAULT ELSE");
+          yy_ScanError(YY_NO_MATCH);
+        }
+   }
   }
+}
 
 
 }
