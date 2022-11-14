@@ -31,34 +31,117 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, UMINUS, TIMES, LPAREN, RPAREN, A, ABBR, ACRONYM, ADDRESS, APPLET, AREA, B, BASEFONT, BDO, BIG,
-					BLOCKQUOTE, BODY, BR, BUTTON, CAPTOPN, CENTER, CITE, CODE, COL, COLGROUP, DD, DEL, DFN, DIR, DIV, DL, DT, EM, FIELDSET, 
+terminal            A, ABBR, ACRONYM, ADDRESS, APPLET, AREA, B, BASEFONT, BDO, BIG,
+					BLOCKQUOTE, BODY, BR, BUTTON, CAPTION, CENTER, CITE, CODE, COL, COLGROUP, DD, DEL, DFN, DIR, DIV, DL, DT, EM, FIELDSET, 
 					FONT, FORM, FRAME, FRAMESET, HEAD, H1, H2, H3, H4, H5, H6, HR, HTML, I, IFRAME, IMG, INPUT, INS, INSINDEX, KDB, LABEL, LEGEND,
 					LI, LINK, LISTING, MAP, MENU, META, NEXTID, NOFRAMES, NOSCRIPT, OBJECT, OL, OPTGROUP, OPTION, P, PARAM, PLAINTEXT, PRE, Q,
 					S, SAMP, SELECT, SCRIPT, SMALL, SPAN, STRIKE, STRONG, STYLE, SUB, SUP, TABLE, TBODY, TD, TEXTAREA, TFOOT, TH, THEAD, TITLE,
-					TR, TT, U, UL, VAR, XMP;
-terminal Integer    NUMBER;        // our scanner provides numbers as integers  
+					TR, TT, U, UL, VAR, XMP, STARTTAG, ENDTAG, CLOSETAG;
 
 /* Non terminals */
 non terminal            expr_list;
-non terminal Integer    expr;      // used to store evaluated subexpressions
+non terminal			tags_list;
 
 /* Precedences */
-precedence left PLUS, MINUS;
-precedence left TIMES;
-precedence left UMINUS;
+
+precedence left STARTTAG, ENDTAG, CLOSETAG;
 
 /* The grammar rules */
-expr_list ::= expr_list expr:e SEMI         {: System.out.println(e); :}
-            | expr:e SEMI                   {: System.out.println(e); :}
-            ;
-            
-expr      ::= expr:e1 PLUS  expr:e2         {: RESULT = e1+e2;        :}
-             | expr:e1 MINUS expr:e2        {: RESULT = e1-e2;        :}
-             | expr:e1 TIMES expr:e2        {: RESULT = e1*e2;        :}
-             | MINUS expr:e                 {: RESULT = -e;           :}
-             %prec UMINUS
-             | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
-             | NUMBER:n	                     {: RESULT = n;           :}
-             ;
-       
+tags_list ::= 
+			|A
+			|ABBR
+			|ACRONYM
+			|ADDRESS
+			|APPLET
+			|AREA
+			|B
+			|BASEFONT
+			|BDO
+			|BIG
+			|BLOCKQUOTE
+			|BODY
+			|CAPTION
+			|CENTER
+			|CITE
+			|COLGROUP
+			|DD
+			|DEL
+			|DFN
+			|DIR
+			|DIV
+			|DL
+			|DT
+			|EM
+			|FIELDSET
+			|FONT
+			|FORM
+			|FRAME
+			|FRAMESET
+			|HEAD
+			|H1
+			|H2
+			|H3
+			|H4
+			|H5
+			|H6
+			|HR
+			|HTML
+			|I
+			|IFRAME
+			|IMG
+			|INPUT
+			|INS
+			|INSINDEX
+			|LABEL
+			|LEGEND
+			|LI
+			|LINK
+			|LISTING
+			|MAP
+			|MENU
+			|META
+			|NEXTID
+			|NOFRAMES
+			|NOSCRIPT
+			|OBJECT
+			|OL
+			|OPTGROUP
+			|OPTION
+			|P
+			|PARAM
+			|PLAINTEXT
+			|PRE
+			|Q
+			|S
+			|SAMP
+			|SCRIPT
+			|SELECT
+			|SMALL
+			|SPAN
+			|STRIKE
+			|STRONG
+			|STYLE
+			|SUB
+			|SUP
+			|TABLE
+			|TBODY
+			|TD
+			|TEXTAREA
+			|TFOOT
+			|TH
+			|THEAD
+			|TITLE
+			|TR
+			|TT
+			|U
+			|UL
+			|VAR
+			|XMP
+			|STARTTAG
+			|ENDTAG
+			|CLOSETAG
+			;
+
+expr_list ::= STARTTAG tags_list:e1 ENDTAG {: RESULT = <e1>; :}
+			& CLOSETAG tags_list:e1 ENDTAG {: RESULT = </e1>; :}
+			;
