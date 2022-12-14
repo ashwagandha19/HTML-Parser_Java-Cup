@@ -1,0 +1,9 @@
+DOCTYPE
+<HTML>
+<HEAD></HEAD>
+<BODY>
+	<UL>
+		<LI></LI>
+	</UL>
+</BODY>
+</HTML>

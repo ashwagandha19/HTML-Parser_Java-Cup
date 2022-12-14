@@ -8,105 +8,120 @@ package cup.example;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int TD = 84;
-  public static final int NOSCRIPT = 61;
-  public static final int H6 = 41;
-  public static final int H5 = 40;
-  public static final int H4 = 39;
-  public static final int H3 = 38;
-  public static final int H2 = 37;
-  public static final int FRAME = 33;
-  public static final int H1 = 36;
-  public static final int STYLE = 79;
-  public static final int LISTING = 55;
-  public static final int COLGROUP = 21;
-  public static final int DFN = 24;
-  public static final int PARAM = 67;
-  public static final int TABLE = 82;
-  public static final int STARTTAG = 96;
-  public static final int SUP = 81;
+  public static final int TD = 95;
+  public static final int NOSCRIPT = 71;
+  public static final int BGSOUND = 12;
+  public static final int H6 = 44;
+  public static final int GT = 108;
+  public static final int H5 = 43;
+  public static final int H4 = 42;
+  public static final int H3 = 41;
+  public static final int H2 = 40;
+  public static final int FRAME = 36;
+  public static final int H1 = 39;
+  public static final int STYLE = 90;
+  public static final int LISTING = 61;
+  public static final int COLGROUP = 23;
+  public static final int PARAM = 77;
+  public static final int DFN = 26;
+  public static final int TABLE = 93;
+  public static final int WBR = 105;
+  public static final int SL = 110;
+  public static final int KEYGEN = 55;
+  public static final int SUP = 92;
   public static final int APPLET = 6;
-  public static final int SAMP = 72;
+  public static final int BLINK = 14;
+  public static final int href = 112;
+  public static final int SAMP = 81;
   public static final int ACRONYM = 4;
-  public static final int SUB = 80;
-  public static final int FONT = 31;
-  public static final int TFOOT = 86;
-  public static final int FRAMESET = 34;
-  public static final int KDB = 50;
-  public static final int DEL = 23;
-  public static final int LI = 53;
-  public static final int CENTER = 17;
-  public static final int OBJECT = 62;
-  public static final int XMP = 95;
-  public static final int VAR = 94;
+  public static final int LT = 109;
+  public static final int SUB = 91;
+  public static final int FONT = 34;
+  public static final int TFOOT = 97;
+  public static final int FRAMESET = 37;
+  public static final int DEL = 25;
+  public static final int LI = 59;
+  public static final int version = 111;
+  public static final int CENTER = 19;
+  public static final int ILAYER = 49;
+  public static final int OBJECT = 72;
+  public static final int XMP = 107;
+  public static final int VAR = 106;
   public static final int ADDRESS = 5;
-  public static final int PLAINTEXT = 68;
-  public static final int HTML = 43;
-  public static final int ENDTAG = 97;
-  public static final int EM = 29;
-  public static final int IFRAME = 45;
-  public static final int STRIKE = 77;
-  public static final int BASEFONT = 9;
-  public static final int SELECT = 73;
-  public static final int TEXTAREA = 85;
-  public static final int CITE = 18;
-  public static final int BDO = 10;
+  public static final int HTML = 46;
+  public static final int EMBED = 32;
+  public static final int ISINDEX = 53;
+  public static final int EM = 31;
+  public static final int IFRAME = 48;
+  public static final int STRIKE = 88;
+  public static final int MULTICOL = 66;
+  public static final int BASEFONT = 10;
+  public static final int NOBR = 68;
+  public static final int SELECT = 82;
+  public static final int TEXTAREA = 96;
+  public static final int CITE = 20;
+  public static final int BDO = 11;
   public static final int ABBR = 3;
-  public static final int NOFRAMES = 60;
-  public static final int LEGEND = 52;
-  public static final int DT = 28;
-  public static final int INPUT = 47;
-  public static final int U = 92;
-  public static final int S = 71;
-  public static final int DIV = 26;
-  public static final int DL = 27;
-  public static final int Q = 70;
-  public static final int P = 66;
+  public static final int NOFRAMES = 70;
+  public static final int LEGEND = 58;
+  public static final int DT = 30;
+  public static final int INPUT = 51;
+  public static final int U = 103;
+  public static final int S = 80;
+  public static final int DIV = 28;
+  public static final int DL = 29;
+  public static final int Q = 79;
+  public static final int KBD = 54;
+  public static final int P = 76;
   public static final int AREA = 7;
-  public static final int DIR = 25;
-  public static final int NEXTID = 59;
-  public static final int SMALL = 75;
-  public static final int DD = 22;
-  public static final int INSINDEX = 49;
-  public static final int INS = 48;
-  public static final int MAP = 56;
-  public static final int I = 44;
-  public static final int FORM = 32;
-  public static final int LINK = 54;
+  public static final int DIR = 27;
+  public static final int NEXTID = 67;
+  public static final int DOCTYPE = 113;
+  public static final int SMALL = 85;
+  public static final int DD = 24;
+  public static final int INS = 52;
+  public static final int MAP = 62;
+  public static final int I = 47;
+  public static final int FORM = 35;
+  public static final int LINK = 60;
   public static final int EOF = 0;
   public static final int B = 8;
   public static final int A = 2;
-  public static final int BUTTON = 15;
-  public static final int COL = 20;
-  public static final int BLOCKQUOTE = 12;
-  public static final int FIELDSET = 30;
-  public static final int CLOSETAG = 98;
-  public static final int SPAN = 76;
-  public static final int LABEL = 51;
-  public static final int BIG = 11;
-  public static final int STRONG = 78;
-  public static final int SCRIPT = 74;
-  public static final int TITLE = 89;
-  public static final int BODY = 13;
-  public static final int MENU = 57;
+  public static final int COL = 22;
+  public static final int BLOCKQUOTE = 15;
+  public static final int FIELDSET = 33;
+  public static final int SPAN = 87;
+  public static final int LABEL = 56;
+  public static final int BIG = 13;
+  public static final int STRONG = 89;
+  public static final int SCRIPT = 84;
+  public static final int SERVER = 83;
+  public static final int TITLE = 100;
+  public static final int BODY = 16;
+  public static final int MENU = 64;
   public static final int error = 1;
-  public static final int OPTGROUP = 64;
-  public static final int OL = 63;
-  public static final int UL = 93;
-  public static final int HEAD = 35;
-  public static final int CAPTION = 16;
-  public static final int PRE = 69;
-  public static final int IMG = 46;
-  public static final int BR = 14;
-  public static final int META = 58;
-  public static final int CODE = 19;
-  public static final int HR = 42;
-  public static final int OPTION = 65;
-  public static final int TBODY = 83;
-  public static final int TT = 91;
-  public static final int TR = 90;
-  public static final int THEAD = 88;
-  public static final int TH = 87;
+  public static final int OPTGROUP = 74;
+  public static final int OL = 73;
+  public static final int NOEMBED = 69;
+  public static final int UL = 104;
+  public static final int SPACER = 86;
+  public static final int HEAD = 38;
+  public static final int CAPTION = 18;
+  public static final int PRE = 78;
+  public static final int IMG = 50;
+  public static final int BASE = 9;
+  public static final int BR = 17;
+  public static final int META = 65;
+  public static final int CODE = 21;
+  public static final int MARQUEE = 63;
+  public static final int HR = 45;
+  public static final int OPTION = 75;
+  public static final int TBODY = 94;
+  public static final int TT = 102;
+  public static final int TR = 101;
+  public static final int LAYER = 57;
+  public static final int THEAD = 99;
+  public static final int TH = 98;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -117,13 +132,15 @@ public interface sym {
   "APPLET",
   "AREA",
   "B",
+  "BASE",
   "BASEFONT",
   "BDO",
+  "BGSOUND",
   "BIG",
+  "BLINK",
   "BLOCKQUOTE",
   "BODY",
   "BR",
-  "BUTTON",
   "CAPTION",
   "CENTER",
   "CITE",
@@ -138,6 +155,7 @@ public interface sym {
   "DL",
   "DT",
   "EM",
+  "EMBED",
   "FIELDSET",
   "FONT",
   "FORM",
@@ -154,20 +172,27 @@ public interface sym {
   "HTML",
   "I",
   "IFRAME",
+  "ILAYER",
   "IMG",
   "INPUT",
   "INS",
-  "INSINDEX",
-  "KDB",
+  "ISINDEX",
+  "KBD",
+  "KEYGEN",
   "LABEL",
+  "LAYER",
   "LEGEND",
   "LI",
   "LINK",
   "LISTING",
   "MAP",
+  "MARQUEE",
   "MENU",
   "META",
+  "MULTICOL",
   "NEXTID",
+  "NOBR",
+  "NOEMBED",
   "NOFRAMES",
   "NOSCRIPT",
   "OBJECT",
@@ -176,14 +201,15 @@ public interface sym {
   "OPTION",
   "P",
   "PARAM",
-  "PLAINTEXT",
   "PRE",
   "Q",
   "S",
   "SAMP",
   "SELECT",
+  "SERVER",
   "SCRIPT",
   "SMALL",
+  "SPACER",
   "SPAN",
   "STRIKE",
   "STRONG",
@@ -202,11 +228,15 @@ public interface sym {
   "TT",
   "U",
   "UL",
+  "WBR",
   "VAR",
   "XMP",
-  "STARTTAG",
-  "ENDTAG",
-  "CLOSETAG"
+  "GT",
+  "LT",
+  "SL",
+  "version",
+  "href",
+  "DOCTYPE"
   };
 }
 

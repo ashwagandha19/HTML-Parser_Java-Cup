@@ -13,6 +13,23 @@ import java.io.FileInputStream;
 
 parser code {:
   protected Lexer lexer;
+
+  /*declare variabila tip Multipath tree*/
+  private MultiTree parseTree = new MultiTree();
+
+  /*acces din exterior la variabila*/
+  public MultiTree getParseTree() {
+     return parseTree;
+  }
+
+  protected MultiTreeNode createTagNode(MultiTreeNode tagName, String value) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createTagNodeWithAttributesAndContent(MultiTreeNode tagAttributes, MultiTreeNode tagContent) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createTagNodeWithAttributesNameAndValue(MultiTreeNode attrName, MultiTreeNode attrValue) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createHeadAndBodyTags(MultiTreeNode htmlTag, MultiTreeNode bodyTag) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createContentNode(MultiTreeNode contentNode) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createAttributeNameNode(MultiTreeNode attributeNameNode) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createTagAndContentNode(MultiTreeNode tagName, MultiTreeNode contentNode) {throw new UnsupportedOperationException();}
+  protected MultiTreeNode createTagsAndContentNode(MultiTreeNode tagName, MultiTreeNode tagName2, MultiTreeNode contentNode) {throw new UnsupportedOperationException();}
 :}
 
 /* define how to connect to the scanner! */
@@ -31,117 +48,824 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            A, ABBR, ACRONYM, ADDRESS, APPLET, AREA, B, BASEFONT, BDO, BIG,
-					BLOCKQUOTE, BODY, BR, BUTTON, CAPTION, CENTER, CITE, CODE, COL, COLGROUP, DD, DEL, DFN, DIR, DIV, DL, DT, EM, FIELDSET, 
-					FONT, FORM, FRAME, FRAMESET, HEAD, H1, H2, H3, H4, H5, H6, HR, HTML, I, IFRAME, IMG, INPUT, INS, INSINDEX, KDB, LABEL, LEGEND,
-					LI, LINK, LISTING, MAP, MENU, META, NEXTID, NOFRAMES, NOSCRIPT, OBJECT, OL, OPTGROUP, OPTION, P, PARAM, PLAINTEXT, PRE, Q,
-					S, SAMP, SELECT, SCRIPT, SMALL, SPAN, STRIKE, STRONG, STYLE, SUB, SUP, TABLE, TBODY, TD, TEXTAREA, TFOOT, TH, THEAD, TITLE,
-					TR, TT, U, UL, VAR, XMP, STARTTAG, ENDTAG, CLOSETAG;
-
+terminal            A, ABBR, ACRONYM, ADDRESS, APPLET, AREA, B, BASE, BASEFONT, BDO, BGSOUND, BIG, BLINK,
+					BLOCKQUOTE, BODY, BR, CAPTION, CENTER, CITE, CODE, COL, COLGROUP, DD, DEL, DFN, DIR, DIV, DL, DT, EM, EMBED, FIELDSET, 
+					FONT, FORM, FRAME, FRAMESET, HEAD, H1, H2, H3, H4, H5, H6, HR, HTML, I, IFRAME, ILAYER, IMG, INPUT, INS, ISINDEX, KBD, KEYGEN, LABEL, LAYER, LEGEND,
+					LI, LINK, LISTING, MAP, MARQUEE, MENU, META, MULTICOL, NEXTID, NOBR, NOEMBED, NOFRAMES, NOSCRIPT, OBJECT, OL, OPTGROUP, OPTION, P, PARAM, PRE, Q,
+					S, SAMP, SELECT, SERVER, SCRIPT, SMALL,SPACER, SPAN, STRIKE, STRONG, STYLE, SUB, SUP, TABLE, TBODY, TD, TEXTAREA, TFOOT, TH, THEAD, TITLE,
+					TR, TT, U, UL, WBR, VAR, XMP, GT, LT, SL, version, href, DOCTYPE;
+					
 /* Non terminals */
-non terminal            expr_list;
-non terminal			tags_list;
 
-/* Precedences */
+/*non terminal a_tag,abbr_tag,acronym_tag,address_tag,applet_tag,b_tag,basefont_tag,bdo_tag, bgsound_tag, big_tag, blink_tag,blockquote_tag,body_tag,br_tag, caption_tag,center_tag,cite_tag,colgroup_tag, code_tag,
+col_tag, dd_tag,del_tag,dfn_tag,dir_tag,div_tag,dl_tag,dt_tag,em_tag,embed_tag, fieldset_tag,font_tag,form_tag,frame_tag,frameset_tag,head_tag, heading_tag, h1_tag,h2_tag,h3_tag,h4_tag,h5_tag,
+h6_tag,hr_tag,html_tag,i_tag,iframe_tag,ilayer_tag,img_tag,input_tag,ins_tag,kbd_tag, keygen_tag,label_tag, layer_tag,legend_tag,li_tag,link_tag,listing_tag,map_tag,marquee_tag, menu_tag,meta_tag, multicol_tag, nobr_tag, nextid_tag,
+noembed_tag, noframes_tag,noscript_tag,object_tag,ol_tag,optgroup_tag,option_tag,p_tag,param_tag,pre_tag,q_tag,s_tag,samp_tag,script_tag,select_tag, server_tag, small_tag, spacer_tag, span_tag,strike_tag,
+strong_tag,style_tag,sub_tag,sup_tag,table_tag,tbody_tag,td_tag,textarea_tag,tfoot_tag,th_tag,thead_tag,title_tag,tr_tag,tt_tag,u_tag,ul_tag,var_tag,wbr_tag,xmp_tag,html_document,base_tag,isindex_tag
+;
+non terminal html_tag_attributes, html_attribute, html_attribute_name, html_attribute_value, a_tag_attributes, a_attribute, a_attribute_name;
+non terminal html_content, a_content, head_content, body_content, address_content, applet_content, block_content, colgroup_content, flow_content, frameset_content, form_content, label_content, map_content,
+object_content, pre_content, select_content, table_content, text_content, block, text, flow, dl_content, style_text, literal_text, plain_text, physical_style, table_cell, content_style;
+*/
 
-precedence left STARTTAG, ENDTAG, CLOSETAG;
-
+/* Non-Terminals */
+non terminal MultiTreeNode doctype_tag;
+non terminal MultiTreeNode a_tag;
+non terminal MultiTreeNode abbr_tag;
+non terminal MultiTreeNode acronym_tag;
+non terminal MultiTreeNode address_tag;
+non terminal MultiTreeNode applet_tag;
+non terminal MultiTreeNode b_tag;
+non terminal MultiTreeNode basefont_tag;
+non terminal MultiTreeNode bdo_tag;
+non terminal MultiTreeNode bgsound_tag;
+non terminal MultiTreeNode big_tag;
+non terminal MultiTreeNode blink_tag;
+non terminal MultiTreeNode blockquote_tag;
+non terminal MultiTreeNode body_tag;
+non terminal MultiTreeNode br_tag;
+non terminal MultiTreeNode caption_tag;
+non terminal MultiTreeNode center_tag;
+non terminal MultiTreeNode cite_tag;
+non terminal MultiTreeNode colgroup_tag;
+non terminal MultiTreeNode code_tag;
+non terminal MultiTreeNode col_tag;
+non terminal MultiTreeNode dd_tag;
+non terminal MultiTreeNode del_tag;
+non terminal MultiTreeNode dfn_tag;
+non terminal MultiTreeNode dt_tag;
+non terminal MultiTreeNode dir_tag;
+non terminal MultiTreeNode div_tag;
+non terminal MultiTreeNode dl_tag;
+non terminal MultiTreeNode embed_tag;
+non terminal MultiTreeNode em_tag;
+non terminal MultiTreeNode fieldset_tag;
+non terminal MultiTreeNode font_tag;
+non terminal MultiTreeNode form_tag;
+non terminal MultiTreeNode frameset_tag;
+non terminal MultiTreeNode frame_tag;
+non terminal MultiTreeNode head_tag;
+non terminal MultiTreeNode heading_tag;
+non terminal MultiTreeNode h1_tag;
+non terminal MultiTreeNode h2_tag;
+non terminal MultiTreeNode h3_tag;
+non terminal MultiTreeNode h4_tag;
+non terminal MultiTreeNode h5_tag;
+non terminal MultiTreeNode h6_tag;
+non terminal MultiTreeNode hr_tag;
+non terminal MultiTreeNode html_tag;
+non terminal MultiTreeNode i_tag;
+non terminal MultiTreeNode iframe_tag;
+non terminal MultiTreeNode ilayer_tag;
+non terminal MultiTreeNode img_tag;
+non terminal MultiTreeNode input_tag;
+non terminal MultiTreeNode ins_tag;
+non terminal MultiTreeNode kbd_tag;
+non terminal MultiTreeNode keygen_tag;
+non terminal MultiTreeNode label_tag;
+non terminal MultiTreeNode layer_tag;
+non terminal MultiTreeNode legend_tag;
+non terminal MultiTreeNode li_tag;
+non terminal MultiTreeNode link_tag;
+non terminal MultiTreeNode listing_tag;
+non terminal MultiTreeNode map_tag;
+non terminal MultiTreeNode marquee_tag;
+non terminal MultiTreeNode menu_tag;
+non terminal MultiTreeNode map_content;
+non terminal MultiTreeNode meta_tag;
+non terminal MultiTreeNode multicol_tag;
+non terminal MultiTreeNode nobr_tag;
+non terminal MultiTreeNode nextid_tag;
+non terminal MultiTreeNode noembed_tag;
+non terminal MultiTreeNode noframes_tag;
+non terminal MultiTreeNode noscript_tag;
+non terminal MultiTreeNode object_tag;
+non terminal MultiTreeNode ol_tag;
+non terminal MultiTreeNode optgroup_tag;
+non terminal MultiTreeNode option_tag;
+non terminal MultiTreeNode p_tag;
+non terminal MultiTreeNode param_tag;
+non terminal MultiTreeNode pre_tag;
+non terminal MultiTreeNode q_tag;
+non terminal MultiTreeNode script_tag;
+non terminal MultiTreeNode select_tag;
+non terminal MultiTreeNode small_tag;
+non terminal MultiTreeNode spacer_tag;
+non terminal MultiTreeNode span_tag;
+non terminal MultiTreeNode server_tag;
+non terminal MultiTreeNode samp_tag;
+non terminal MultiTreeNode strong_tag;
+non terminal MultiTreeNode s_tag;
+non terminal MultiTreeNode strike_tag;
+non terminal MultiTreeNode style_tag;
+non terminal MultiTreeNode sub_tag;
+non terminal MultiTreeNode sup_tag;
+non terminal MultiTreeNode table_tag;
+non terminal MultiTreeNode tbody_tag;
+non terminal MultiTreeNode td_tag;
+non terminal MultiTreeNode textarea_tag;
+non terminal MultiTreeNode area_tag;
+non terminal MultiTreeNode tfoot_tag;
+non terminal MultiTreeNode th_tag;
+non terminal MultiTreeNode thead_tag;
+non terminal MultiTreeNode title_tag;
+non terminal MultiTreeNode tr_tag;
+non terminal MultiTreeNode tt_tag;
+non terminal MultiTreeNode u_tag;
+non terminal MultiTreeNode ul_tag;
+non terminal MultiTreeNode wbr_tag;
+non terminal MultiTreeNode xmp_tag;
+non terminal MultiTreeNode html_document;
+non terminal MultiTreeNode base_tag;
+non terminal MultiTreeNode isindex_tag;
+non terminal MultiTreeNode var_tag;
+non terminal MultiTreeNode doc_start;
+non terminal MultiTreeNode html_tag_attributes;
+non terminal MultiTreeNode html_attribute;
+non terminal MultiTreeNode html_attribute_value;
+non terminal MultiTreeNode html_attribute_name;
+non terminal MultiTreeNode a_tag_attributes;
+non terminal MultiTreeNode a_attribute;
+non terminal MultiTreeNode a_attribute_name;
+non terminal MultiTreeNode html_content;
+non terminal MultiTreeNode a_content;
+non terminal MultiTreeNode head_content;
+non terminal MultiTreeNode body_content;
+non terminal MultiTreeNode address_content;
+non terminal MultiTreeNode applet_content;
+non terminal MultiTreeNode block_content;
+non terminal MultiTreeNode colgroup_content;
+non terminal MultiTreeNode flow_content;
+non terminal MultiTreeNode frameset_content;
+non terminal MultiTreeNode form_content;
+non terminal MultiTreeNode label_content;
+non terminal MultiTreeNode object_content;
+non terminal MultiTreeNode pre_content;
+non terminal MultiTreeNode select_content;
+non terminal MultiTreeNode table_content;
+non terminal MultiTreeNode text_content;
+non terminal MultiTreeNode block;
+non terminal MultiTreeNode text;
+non terminal MultiTreeNode flow;
+non terminal MultiTreeNode dl_content;
+non terminal MultiTreeNode style_text;
+non terminal MultiTreeNode literal_text;
+non terminal MultiTreeNode plain_text;
+non terminal MultiTreeNode physical_style;
+non terminal MultiTreeNode table_cell;
+non terminal MultiTreeNode content_style;
+non terminal MultiTreeNode a_attribute_value;
+non terminal MultiTreeNode head_tag_attributes;
+non terminal MultiTreeNode body_tag_attributes;
+non terminal MultiTreeNode href_attr;
 /* The grammar rules */
-tags_list ::= 
-			|A
-			|ABBR
-			|ACRONYM
-			|ADDRESS
-			|APPLET
-			|AREA
-			|B
-			|BASEFONT
-			|BDO
-			|BIG
-			|BLOCKQUOTE
-			|BODY
-			|CAPTION
-			|CENTER
-			|CITE
-			|COLGROUP
-			|DD
-			|DEL
-			|DFN
-			|DIR
-			|DIV
-			|DL
-			|DT
-			|EM
-			|FIELDSET
-			|FONT
-			|FORM
-			|FRAME
-			|FRAMESET
-			|HEAD
-			|H1
-			|H2
-			|H3
-			|H4
-			|H5
-			|H6
-			|HR
-			|HTML
-			|I
-			|IFRAME
-			|IMG
-			|INPUT
-			|INS
-			|INSINDEX
-			|LABEL
-			|LEGEND
-			|LI
-			|LINK
-			|LISTING
-			|MAP
-			|MENU
-			|META
-			|NEXTID
-			|NOFRAMES
-			|NOSCRIPT
-			|OBJECT
-			|OL
-			|OPTGROUP
-			|OPTION
-			|P
-			|PARAM
-			|PLAINTEXT
-			|PRE
-			|Q
-			|S
-			|SAMP
-			|SCRIPT
-			|SELECT
-			|SMALL
-			|SPAN
-			|STRIKE
-			|STRONG
-			|STYLE
-			|SUB
-			|SUP
-			|TABLE
-			|TBODY
-			|TD
-			|TEXTAREA
-			|TFOOT
-			|TH
-			|THEAD
-			|TITLE
-			|TR
-			|TT
-			|U
-			|UL
-			|VAR
-			|XMP
-			|STARTTAG
-			|ENDTAG
-			|CLOSETAG
-			;
+//https://www.w3.org/TR/html4/index/attributes.html
 
-expr_list ::= STARTTAG tags_list:e1 ENDTAG {: RESULT = <e1>; :}
-			& CLOSETAG tags_list:e1 ENDTAG {: RESULT = </e1>; :}
-			;
+doc_start
+	::= DOCTYPE html_document:html_d
+	{:RESULT = parseTree.create("DOCTYPE");:}
+	;
+	
+html_document
+	::= html_tag:html_t {:RESULT = createTagNode(html_t, "HTML");:}
+	;
+//create functions for each TreeNode
+
+//creating attributes and content nodes on html
+html_tag
+	::= LT HTML html_tag_attributes:html_a_list GT html_content:html_c LT SL HTML GT  
+	{:RESULT = createTagNodeWithAttributesAndContent(html_a_list, html_c);:}
+	;
+	
+
+html_tag_attributes
+	::= html_attribute_name:html_a_k html_attribute_value:html_a_v
+	{:RESULT = createTagNodeWithAttributesNameAndValue(html_a_k, html_a_v);:}
+	;
+	
+html_attribute_name
+	::= version {:System.out.println("html attribute name found"); :}
+	;
+	
+html_content
+	::= head_tag:head_t body_tag:body_t {:RESULT = createHeadAndBodyTags(head_t, body_t);:}
+	| head_tag:head_t frameset_tag:frameset_t {:RESULT = createHeadAndBodyTags(head_t, frameset_t);:}
+	;
+
+head_tag
+	::= LT HEAD head_tag_attributes:head_a_list GT head_content:head_c LT SL HEAD GT {:RESULT = createTagNodeWithAttributesAndContent(head_a_list, head_c);:}
+	;
+
+head_content
+	::= base_tag:base_t {:RESULT = createTagNode(base_t, "BASE");:}
+	| isindex_tag:isindex_t {:RESULT = createTagNode(isindex_t, "ISINDEX");:}
+	| link_tag:link_t {:RESULT = createTagNode(link_t, "LINK");:}
+	| meta_tag:meta_t  {:RESULT = createTagNode(meta_t, "META");:}
+	| nextid_tag:nextid_t {:RESULT = createTagNode(nextid_t, "NEXTID");:}
+	| style_tag:style_t  {:RESULT = createTagNode(style_t, "STYLE");:}
+	| title_tag:title_t  {:RESULT = createTagNode(title_t, "TITLE");:}
+	| script_tag:script_t {:RESULT = createTagNode(script_t, "SCRIPT");:}
+	;
+
+body_tag
+	::= LT BODY body_tag_attributes:body_a_list GT body_content:body_c LT SL BODY GT  {:RESULT = createTagNodeWithAttributesAndContent(body_a_list, body_c);:}
+	;
+
+body_content
+	::= bgsound_tag:bgsound_t {:RESULT = createTagNode(bgsound_t, "BGSOUND");:}
+	| hr_tag:hr_t {:RESULT = createTagNode(hr_t, "HR");:}
+	| address_tag:address_t {:RESULT = createTagNode(address_t, "ADDRESS");:}
+	| block:block_t {:RESULT = createTagNode(block_t, "BLOCK");:}
+	| del_tag:del_t {:RESULT = createTagNode(del_t, "DEL");:}
+	| heading_tag:heading_t {:RESULT = createTagNode(heading_t, "HEADING");:}
+	| ins_tag:ins_t {:RESULT = createTagNode(ins_t, "INS");:}
+	| layer_tag:layer_t {:RESULT = createTagNode(layer_t, "LAYER");:}
+	| marquee_tag:marquee_t {:RESULT = createTagNode(marquee_t, "MARQUEE");:}
+	;
+	
+a_tag
+	::= LT A GT a_tag_attributes:a_a_list GT a_content:a_c LT SL A GT {:RESULT = createTagNodeWithAttributesAndContent(a_a_list, a_c);:}
+	;
+	
+a_content
+	::= heading_tag:heading_t {:RESULT = createTagNode(heading_t, "HEADING");:}
+	| text:t_wrapper {:RESULT = createContentNode(t_wrapper);:}
+	;
+
+text 
+	::= text_content:text_c {:RESULT = createContentNode(text_c);:}
+	;
+
+a_tag_attributes
+	::= a_attribute_name:a_a_k a_attribute_value:a_a_v
+	{:RESULT = createTagNodeWithAttributesNameAndValue(a_a_k, a_a_v);:}
+	;
+		
+a_attribute_name
+	::= href_attr:a_attr {:RESULT = createAttributeNameNode(a_attr);:}
+	;
+	
+abbr_tag
+	::= LT ABBR GT text:text_c_wrapper LT SL ABBR GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+acronym_tag
+	::= LT ACRONYM GT text:text_c_wrapper LT SL ACRONYM GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+address_tag
+	::= LT ADDRESS GT address_content:address_c LT SL ADDRESS GT {:RESULT = createContentNode(address_c);:}
+	;
+
+address_content
+	::= p_tag:p_t {:RESULT = createTagNode(p_t, "P");:}
+	 | text:text_c_wrapper {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+applet_tag
+	::= LT APPLET GT applet_content:applet_c LT SL APPLET GT {:RESULT = createContentNode(applet_c);:}
+	;
+
+applet_content
+	::= body_content:body_c {:RESULT = createContentNode(body_c);:}
+	;
+	
+area_tag
+	::= LT AREA GT
+	;
+
+b_tag
+	::= LT B GT text:text_c_wrapper LT SL B GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+base_tag
+	::= LT BASE GT
+	;
+
+basefont_tag
+	::= LT BASEFONT GT body_content:body_c LT SL BASEFONT GT {:RESULT = createContentNode(body_c);:}
+	;
+
+bdo_tag
+	::= LT BDO GT text:text_c_wrapper LT SL BDO GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+bgsound_tag
+	::= LT BGSOUND GT
+	;
+	
+big_tag
+	::= LT BIG GT text:text_c_wrapper LT SL BIG GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+blink_tag
+	::= LT BLINK GT text:text_c_wrapper LT SL BLINK GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+block
+	::= block_content:block_c {:RESULT = createContentNode(block_c);:}
+	;
+
+block_content
+	::= isindex_tag:isindex_t {:RESULT = createTagNode(isindex_t, "ISINDEX");:}
+	| basefont_tag:basefont_t {:RESULT = createTagNode(basefont_t, "BR");:}
+	| blockquote_tag:blockquote_t {:RESULT = createTagNode(blockquote_t, "BLOCKQUOTE");:}
+	| center_tag:center_t {:RESULT = createTagNode(center_t, "CENTER");:}
+	| dir_tag:dir_t {:RESULT = createTagNode(dir_t, "DIR");:}
+	| div_tag:div_t {:RESULT = createTagNode(div_t, "DIV");:}
+	| dl_tag:dl_t {:RESULT = createTagNode(dl_t, "DL");:}
+	| form_tag:form_t {:RESULT = createTagNode(form_t, "FORM");:}
+	| listing_tag:listing_t {:RESULT = createTagNode(listing_t, "LISTING");:}
+	| menu_tag:menu_t {:RESULT = createTagNode(menu_t, "MENU");:}
+	| multicol_tag:multicol_t {:RESULT = createTagNode(multicol_t, "MULTICOL");:}
+	| nobr_tag:nobr_t {:RESULT = createTagNode(nobr_t, "NOBR");:}
+	| ol_tag:ol_t {:RESULT = createTagNode(ol_t, "OL");:}
+	| p_tag:p_t {:RESULT = createTagNode(p_t, "P");:}
+	| pre_tag:pre_t {:RESULT = createTagNode(pre_t, "PRE");:}
+	| table_tag:table_t {:RESULT = createTagNode(table_t, "TABLE");:}
+	| ul_tag:ul_t {:RESULT = createTagNode(ul_t, "UL");:}
+	| xmp_tag:xmp_t {:RESULT = createTagNode(xmp_t, "XMP");:}
+	;
+
+blockquote_tag
+	::= LT BLOCKQUOTE GT body_content:body_c LT SL BLOCKQUOTE {:RESULT = createContentNode(body_c);:}
+	;
+
+br_tag
+	::= LT BR GT
+	;
+
+caption_tag
+	::= LT CAPTION GT body_content:body_c LT SL CAPTION GT {:RESULT = createContentNode(body_c);:}
+	;
+
+center_tag
+	::= LT CENTER GT body_content:body_c LT SL CENTER GT {:RESULT = createContentNode(body_c);:}
+	;
+
+cite_tag
+	::= LT CITE GT text:text_c_wrapper LT SL CITE GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+code_tag
+	::= LT CODE GT text:text_c_wrapper LT SL CODE GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+colgroup_tag
+	::= LT COLGROUP GT colgroup_content:colgroup_c LT SL COLGROUP GT {:RESULT = createContentNode(colgroup_c);:}
+	;
+
+col_tag
+	::= LT COL GT
+	;
+	
+colgroup_content
+	::= LT col_tag:col_t GT {:RESULT = createTagNode(col_t, "COL");:}
+	;
+
+content_style
+	::= abbr_tag:abbr_t  {:RESULT = createTagNode(abbr_t, "ABBR");:} 
+	| acronym_tag:acronym_t {:RESULT = createTagNode(acronym_t, "ACRONYM");:}  
+	| cite_tag:cite_t  {:RESULT = createTagNode(cite_t, "CITE");:} 
+	| code_tag:code_t   {:RESULT = createTagNode(code_t, "CODE");:}
+	| dfn_tag:dfn_t   {:RESULT = createTagNode(dfn_t, "DFN");:}
+	| em_tag:em_t   {:RESULT = createTagNode(em_t, "EM");:}
+	| kbd_tag:kbd_t {:RESULT = createTagNode(kbd_t, "KBD");:}  
+	| q_tag:q_t   {:RESULT = createTagNode(q_t, "Q");:}
+	| strong_tag:strong_t  {:RESULT = createTagNode(strong_t, "STRONG");:} 
+	| var_tag:var_t  {:RESULT = createTagNode(var_t, "VAR");:}
+	;
+dd_tag
+	::= LT DD GT flow:flow_c_wrapper LT SL DD GT {:RESULT = createContentNode(flow_c_wrapper);:}
+	;
+
+del_tag
+	::= LT DEL GT flow:flow_c_wrapper LT SL DEL GT {:RESULT = createContentNode(flow_c_wrapper);:}
+	;
+
+dfn_tag
+	::= LT DFN GT text:text_c_wrapper LT SL DFN GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+dir_tag
+	::= LT DIR GT li_tag:li_t LT SL DIR GT {:RESULT = createTagNode(li_t, "LI");:}
+	;
+	
+div_tag
+	::= LT DIV GT body_content:body_c LT SL DIV GT {:RESULT = createContentNode(body_c);:}
+	;
+	
+dl_tag
+	::= LT DL GT dl_content:dl_c LT SL DL GT {:RESULT = createContentNode(dl_c);:}
+	;
+
+dt_tag
+	::= LT DT GT text:text_c_wrapper LT SL DT GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+em_tag
+	::= LT EM GT text:text_c_wrapper LT SL EM GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+embed_tag
+	::= LT EMBED GT
+	;
+
+fieldset_tag
+	::= LT FIELDSET GT legend_tag:legend_t form_content:form_c LT SL FIELDSET GT {:RESULT = createTagAndContentNode(legend_t, form_c);:}
+	;
+
+flow 
+	::=flow_content
+	;
+	
+flow_content
+	::= block:block_t {:RESULT = createTagNode(block_t, "BLOCK");:} 
+	| text:text_c_wrapper {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+frame_tag
+	::= LT FRAME GT
+	;
+
+font_tag
+	::= LT FONT GT style_text:s_text LT SL FONT GT {:RESULT = createContentNode(s_text);:}
+	;
+
+form_content
+	::= input_tag:input_t {:RESULT = createTagNode(input_t, "INPUT");:} 
+	| keygen_tag:keygen_t {:RESULT = createTagNode(keygen_t, "KEYGEN");:} 
+	| body_content:block_c {:RESULT = createContentNode(block_c);:} 
+	| fieldset_tag:fieldset_t {:RESULT = createTagNode(fieldset_t, "FIELDSET");:} 
+	| label_tag:label_t {:RESULT = createTagNode(label_t, "LABEL");:}
+	| select_tag:select_t {:RESULT = createTagNode(select_t, "SELECT");:}
+	| textarea_tag:textarea_t {:RESULT = createTagNode(textarea_t, "TEXTAREA");:}
+	;
+
+form_tag
+	::= LT FORM GT form_content:form_c LT SL FORM GT {:RESULT = createContentNode(form_c);:}
+	;
+
+frameset_content
+	::= frame_tag:frame_t {:RESULT = createTagNode(frame_t, "FRAME");:} 
+	 | noframes_tag:noframes_t {:RESULT = createTagNode(noframes_t, "NOFRAMES");:} 
+	;
+
+frameset_tag
+	::= LT FRAMESET GT frameset_content:frameset_c LT SL FRAMESET GT {:RESULT = createContentNode(frameset_c);:} 
+	;
+
+heading_tag
+	::= h1_tag:h1_t {:RESULT = createTagNode(h1_t, "H1");:} 
+	 | h2_tag:h2_t {:RESULT = createTagNode(h2_t, "H2");:} 
+	 | h3_tag:h3_t {:RESULT = createTagNode(h3_t, "H3");:} 
+	 | h4_tag:h4_t {:RESULT = createTagNode(h4_t, "H4");:} 
+	 | h5_tag:h5_t {:RESULT = createTagNode(h5_t, "H5");:} 
+	 | h6_tag:h6_t {:RESULT = createTagNode(h6_t, "H6");:} 
+	;
+
+h1_tag
+	::= LT H1 GT text:text_c_wrapper LT SL H1 GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+h2_tag
+	::= LT H2 GT text:text_c_wrapper LT SL H2 GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+h3_tag
+	::= LT H3 GT text:text_c_wrapper LT SL H3 GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+h4_tag
+	::= LT H4 GT text:text_c_wrapper LT SL H4 GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+h5_tag
+	::= LT H5 GT text:text_c_wrapper LT SL H5 GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+h6_tag
+	::= LT H6 GT text:text_c_wrapper LT SL H6 GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+hr_tag
+	::= LT HR GT
+	;
+
+i_tag 
+	::= LT I GT text:text_c_wrapper LT SL I GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+img_tag
+	::= LT IMG GT
+	;
+
+iframe_tag
+	::= LT IFRAME GT
+	;
+	
+isindex_tag
+	::= LT ISINDEX GT
+	;
+
+ilayer_tag
+	::= LT ILAYER GT body_content:b_content LT SL ILAYER GT {:RESULT = createContentNode(b_content);:}
+	;
+	
+input_tag
+	::= LT INPUT GT
+	;
+
+ins_tag
+	::= LT INS GT flow:flow_c_wrapper LT SL INS GT {:RESULT = createContentNode(flow_c_wrapper);:}
+	;	
+	
+kbd_tag 
+	::= LT KBD GT text:text_c_wrapper LT SL KBD GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+	
+keygen_tag
+	::= LT KEYGEN GT
+	;
+
+label_content
+	::= input_tag:input_t {:RESULT = createTagNode(input_t, "INPUT");:} 
+	| body_content:body_c {:RESULT = createContentNode(body_c);:} 
+	| select_tag:select_t {:RESULT = createTagNode(select_t, "SELECT");:} 
+	| textarea_tag:textarea_t {:RESULT = createTagNode(textarea_t, "TEXTAREA");:} 
+	;
+
+label_tag
+	::= LT LABEL GT label_content:label_c LT SL LABEL GT {:RESULT = createContentNode(label_c);:}
+	;
+
+layer_tag
+	::= LT LAYER GT body_content:body_c LT SL LAYER GT {:RESULT = createContentNode(body_c);:} 
+	;
+
+legend_tag
+	::= LT LEGEND GT text:text_c LT SL LEGEND GT {:RESULT = createContentNode(text_c);:} 
+	;
+
+li_tag
+	::= LT LI GT flow:flow_c_wrapper LT SL LI GT {:RESULT = createContentNode(flow_c_wrapper);:}
+	;
+
+link_tag
+	::= LT LINK GT
+	;
+
+listing_tag
+	::= LT LISTING GT literal_text:literal_c LT SL LISTING GT {:RESULT = createContentNode(literal_c);:}
+	;
+
+map_content
+	::= area_tag
+	;
+
+map_tag
+	::= LT MAP GT map_content:map_c LT SL MAP GT {:RESULT = createContentNode(map_c);:}
+	;
+
+marquee_tag
+	::= LT MARQUEE GT style_text:s_text LT SL MARQUEE GT  {:RESULT = createContentNode(s_text);:}
+	;
+
+meta_tag
+	::= LT META GT
+	;
+
+menu_tag
+	::= LT MENU GT li_tag:li_t LT SL MENU GT {:RESULT = createTagNode(li_t, "LI");:}
+	;
+
+multicol_tag
+	::= LT MULTICOL GT body_content:body_c LT SL MULTICOL GT {:RESULT = createContentNode(body_c);:}
+	;
+	
+nextid_tag
+	::= LT NEXTID GT
+	;
+
+nobr_tag
+	::= LT NOBR GT text:text_c_wrapper LT SL NOBR GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+noembed_tag
+	::= LT NOEMBED GT text:text_c_wrapper LT SL NOEMBED GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+noframes_tag 
+	::= LT NOFRAMES GT body_content:body_c LT SL NOFRAMES GT {:RESULT = createContentNode(body_c);:}
+	;
+
+noscript_tag
+	::= LT NOSCRIPT GT text:text_c_wrapper LT SL NOSCRIPT GT {:RESULT = createContentNode(text_c_wrapper);:}
+	;
+
+object_content
+	::= param_tag:param_t body_content:body_c {:RESULT = createTagAndContentNode(param_t, body_c);:}
+	;
+
+object_tag
+	::= LT OBJECT GT object_content:object_c LT SL OBJECT GT  {:RESULT = createContentNode(object_c);:}
+	;
+
+ol_tag
+	::= LT OL GT li_tag:li_t LT SL OL GT {:RESULT = createTagNode(li_t, "LI");:}
+	;
+
+optgroup_tag
+	::= LT OPTGROUP GT option_tag:option_t LT SL OPTGROUP GT {:RESULT = createTagNode(option_t, "OPTION");:}
+	;
+
+option_tag
+	::= LT OPTION GT plain_text:plain_c LT SL OPTION GT {:RESULT = createContentNode(plain_c);:}
+	;
+
+p_tag
+	::= LT P GT text:t_content_wrapper LT SL P GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+param_tag 
+	::= LT PARAM GT
+	;
+	
+physical_style
+	::= b_tag:b_t {:RESULT = createTagNode(b_t, "B");:}
+	| bdo_tag:bdo_t {:RESULT = createTagNode(bdo_t, "BDO");:} 
+	| big_tag:big_t {:RESULT = createTagNode(big_t, "BIG");:}
+	| blink_tag:blink_t {:RESULT = createTagNode(blink_t, "BLINK");:}
+	| font_tag:font_t {:RESULT = createTagNode(font_t, "FONT");:}
+	| i_tag:i_t {:RESULT = createTagNode(i_t, "I");:}
+	| s_tag:s_t {:RESULT = createTagNode(s_t, "S");:}
+	| small_tag:small_t {:RESULT = createTagNode(small_t, "SMALL");:}
+	| span_tag:span_t {:RESULT = createTagNode(span_t, "SPAN");:}
+	| strike_tag:strike_t {:RESULT = createTagNode(strike_t, "STRIKE");:}
+	| sub_tag:sub_t {:RESULT = createTagNode(sub_t, "SUB");:}
+	| sup_tag:sup_t {:RESULT = createTagNode(sup_t, "SUP");:}
+	| tt_tag:tt_t {:RESULT = createTagNode(tt_t, "TT");:}
+	| u_tag:u_t {:RESULT = createTagNode(u_t, "U");:}
+	;
+
+pre_content
+	::= br_tag:br_t {:RESULT = createTagNode(br_t, "BR");:}
+	| hr_tag:hr_t {:RESULT = createTagNode(hr_t, "HR");:}
+	| a_tag:a_t {:RESULT = createTagNode(a_t, "A");:}
+	| style_text:s_text {:RESULT = createContentNode(s_text);:}
+	;
+
+pre_tag
+	::= LT PRE GT pre_content:pre_c LT SL PRE GT {:RESULT = createContentNode(pre_c);:}
+	;
+
+q_tag
+	::= LT Q GT text:t_content_wrapper LT SL Q GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+s_tag 
+	::= LT S GT text:t_content_wrapper LT SL S GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+samp_tag
+	::= LT SAMP GT text:t_content_wrapper LT SL SAMP GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+script_tag
+	::= LT SCRIPT GT plain_text:plain_c LT SL SCRIPT GT {:RESULT = createContentNode(plain_c);:}
+	;
+
+select_content
+	::= optgroup_tag:optgroup_t {:RESULT = createTagNode(optgroup_t, "OPTGROUP");:}
+	| option_tag:option_t {:RESULT = createTagNode(option_t, "OPTION");:}
+	;
+
+select_tag
+	::= LT SELECT GT select_content:select_c LT SL SELECT GT {:RESULT = createContentNode(select_c);:}
+	;
+
+server_tag
+	::= LT SERVER GT plain_text:plain_c LT SL SERVER GT {:RESULT = createContentNode(plain_c);:}
+	;
+
+small_tag
+	::= LT SMALL GT text:t_content_wrapper LT SL SMALL GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+spacer_tag
+	::= LT SPACER GT
+	;
+
+span_tag
+	::= LT SPAN GT text:t_content_wrapper LT SL SPAN GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+	
+strike_tag
+	::= LT STRIKE GT text:t_content_wrapper LT SL STRIKE GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+	
+strong_tag
+	::= LT STRONG GT text:t_content_wrapper LT SL STRONG GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+	
+style_tag
+	::= LT STYLE GT plain_text:plain_c LT SL STYLE GT {:RESULT = createContentNode(plain_c);:}
+	;
+
+sub_tag
+	::= LT SUB GT text:t_content_wrapper LT SL SUB GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+sup_tag
+	::= LT SUP GT text:t_content_wrapper LT SL SUP GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+table_cell
+	::= td_tag:td_t {:RESULT = createTagNode(td_t, "TD");:}
+	 | th_tag:th_t {:RESULT = createTagNode(th_t, "TH");:}
+	;
+
+table_content
+	::= tbody_tag:tbody_t {:RESULT = createTagNode(tbody_t, "TBODY");:}
+	 | tfoot_tag:tfoot_t {:RESULT = createTagNode(tfoot_t, "TFOOT");:}
+	 | thead_tag:thead_t {:RESULT = createTagNode(thead_t, "THEAD");:}
+	 | tr_tag:tr_t {:RESULT = createTagNode(tr_t, "TR");:}
+	;
+ 
+tbody_tag
+	::= LT TBODY GT
+	;
+
+tfoot_tag
+	::= LT TFOOT GT
+	;
+
+thead_tag
+	::= LT THEAD GT
+	;
+
+table_tag
+	::= LT TABLE GT caption_tag:caption_t colgroup_tag:colgroup_t table_content:table_c LT SL TABLE GT {:RESULT = createTagsAndContentNode(caption_t, colgroup_t, table_c);:}
+	;
+
+td_tag
+	::= LT TD GT body_content:body_c LT SL TD GT {:RESULT = createContentNode(body_c);:}
+	;
+
+text_content
+	::=  br_tag:br_t {:RESULT = createTagNode(br_t, "BR");:}
+	| embed_tag:embed_t {:RESULT = createTagNode(embed_t, "EMBED");:}
+	| iframe_tag:iframe_t {:RESULT = createTagNode(iframe_t, "IFRAME");:}
+	| img_tag:img_t {:RESULT = createTagNode(img_t, "IMG");:}
+	| spacer_tag:spacer_t {:RESULT = createTagNode(spacer_t, "SPACER");:}
+	| wbr_tag:wbr_t {:RESULT = createTagNode(wbr_t, "WBR");:}
+	| a_tag:a_t {:RESULT = createTagNode(a_t, "A");:}
+	| applet_tag:applet_t {:RESULT = createTagNode(applet_t, "APPLET");:}
+	| content_style:content_s {:RESULT = createContentNode(content_s);:}
+	| ilayer_tag:ilayer_t {:RESULT = createTagNode(ilayer_t, "ILAYER");:}
+	| noembed_tag:noembed_t {:RESULT = createTagNode(noembed_t, "NOEMBED");:}
+	| noscript_tag:noscript_t {:RESULT = createTagNode(noscript_t, "NOSCRIPT");:}
+	| object_tag:object_t {:RESULT = createTagNode(object_t, "OBJECT");:}
+	| plain_text:plain_c {:RESULT = createContentNode(plain_c);:} 
+	| physical_style:physical_s {:RESULT = createContentNode(physical_s);:}
+	;
+
+textarea_tag
+	::= LT TEXTAREA GT plain_text:plain_c LT SL TEXTAREA GT {:RESULT = createContentNode(plain_c);:}
+	;
+
+th_tag
+	::= LT TH GT body_content:body_c LT SL TH GT {:RESULT = createContentNode(body_c);:}
+	;
+
+title_tag
+	::= LT TITLE GT plain_text:plain_c LT SL TITLE GT {:RESULT = createContentNode(plain_c);:}
+	;
+
+tr_tag
+	::= LT TR GT table_cell:t_cell LT SL TR GT {:RESULT = createTagNode(t_cell, "TABLE CELL");:}
+	;
+
+tt_tag
+	::= LT TT GT text:t_content_wrapper LT SL TT GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+u_tag
+	::= LT U GT text:t_content_wrapper LT SL U GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+ul_tag
+	::= LT UL GT li_tag:li_t LT SL UL GT {:RESULT = createTagNode(li_t, "LI");:}
+	;
+
+wbr_tag
+	::= LT WBR GT
+	;
+
+var_tag
+	::= LT VAR GT text:t_content_wrapper LT SL VAR GT {:RESULT = createContentNode(t_content_wrapper);:}
+	;
+
+xmp_tag
+	::= LT XMP GT literal_text:literal_c LT SL XMP GT {:RESULT = createContentNode(literal_c);:}
+	; 
