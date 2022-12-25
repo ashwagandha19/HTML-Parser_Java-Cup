@@ -1,6 +1,7 @@
 DOCTYPE
 <HTML>
-<HEAD></HEAD>
+<HEAD>
+</HEAD>
 <BODY>
 	<UL>
 		<LI></LI>

@@ -53,8 +53,8 @@ terminal            A, ABBR, ACRONYM, ADDRESS, APPLET, AREA, B, BASE, BASEFONT, 
 					FONT, FORM, FRAME, FRAMESET, HEAD, H1, H2, H3, H4, H5, H6, HR, HTML, I, IFRAME, ILAYER, IMG, INPUT, INS, ISINDEX, KBD, KEYGEN, LABEL, LAYER, LEGEND,
 					LI, LINK, LISTING, MAP, MARQUEE, MENU, META, MULTICOL, NEXTID, NOBR, NOEMBED, NOFRAMES, NOSCRIPT, OBJECT, OL, OPTGROUP, OPTION, P, PARAM, PRE, Q,
 					S, SAMP, SELECT, SERVER, SCRIPT, SMALL,SPACER, SPAN, STRIKE, STRONG, STYLE, SUB, SUP, TABLE, TBODY, TD, TEXTAREA, TFOOT, TH, THEAD, TITLE,
-					TR, TT, U, UL, WBR, VAR, XMP, GT, LT, SL, version, href, DOCTYPE;
-					
+					TR, TT, U, UL, WBR, VAR, XMP, GT, LT, SL, version, href, DOCTYPE, title, profile, style, EQ;
+terminal String		STRING;					
 /* Non terminals */
 
 /*non terminal a_tag,abbr_tag,acronym_tag,address_tag,applet_tag,b_tag,basefont_tag,bdo_tag, bgsound_tag, big_tag, blink_tag,blockquote_tag,body_tag,br_tag, caption_tag,center_tag,cite_tag,colgroup_tag, code_tag,
@@ -218,6 +218,8 @@ non terminal MultiTreeNode a_attribute_value;
 non terminal MultiTreeNode head_tag_attributes;
 non terminal MultiTreeNode body_tag_attributes;
 non terminal MultiTreeNode href_attr;
+non terminal MultiTreeNode head_attribute_name;
+non terminal MultiTreeNode head_attribute_value;
 /* The grammar rules */
 //https://www.w3.org/TR/html4/index/attributes.html
 
@@ -239,23 +241,45 @@ html_tag
 	
 
 html_tag_attributes
-	::= html_attribute_name:html_a_k html_attribute_value:html_a_v
+	::= html_attribute_name:html_a_k EQ html_attribute_value:html_a_v
 	{:RESULT = createTagNodeWithAttributesNameAndValue(html_a_k, html_a_v);:}
+	| {: RESULT = null; :}
 	;
 	
 html_attribute_name
-	::= version {:System.out.println("html attribute name found"); :}
+	::= version 
+	| style
+	| title
+	| {: RESULT = null; :}
 	;
 	
 html_content
 	::= head_tag:head_t body_tag:body_t {:RESULT = createHeadAndBodyTags(head_t, body_t);:}
 	| head_tag:head_t frameset_tag:frameset_t {:RESULT = createHeadAndBodyTags(head_t, frameset_t);:}
+	| {: RESULT = null; :}
 	;
 
 head_tag
 	::= LT HEAD head_tag_attributes:head_a_list GT head_content:head_c LT SL HEAD GT {:RESULT = createTagNodeWithAttributesAndContent(head_a_list, head_c);:}
 	;
 
+head_tag_attributes
+	::= head_attribute_name:head_a_k head_attribute_value:head_a_v
+	{:RESULT = createTagNodeWithAttributesNameAndValue(head_a_k, head_a_v);:}
+	| {: RESULT = null; :}
+	;
+	
+head_attribute_name
+	::= title
+	| profile
+	| style
+	| {: RESULT = null; :}
+	;
+
+head_attribute_value
+    ::= {: RESULT = null; :}
+	;
+	
 head_content
 	::= base_tag:base_t {:RESULT = createTagNode(base_t, "BASE");:}
 	| isindex_tag:isindex_t {:RESULT = createTagNode(isindex_t, "ISINDEX");:}
@@ -265,6 +289,11 @@ head_content
 	| style_tag:style_t  {:RESULT = createTagNode(style_t, "STYLE");:}
 	| title_tag:title_t  {:RESULT = createTagNode(title_t, "TITLE");:}
 	| script_tag:script_t {:RESULT = createTagNode(script_t, "SCRIPT");:}
+	| {: RESULT = null; :}
+	;
+	
+plain_text
+	::= {: RESULT = null; :}
 	;
 
 body_tag
@@ -295,6 +324,7 @@ a_content
 text 
 	::= text_content:text_c {:RESULT = createContentNode(text_c);:}
 	;
+
 
 a_tag_attributes
 	::= a_attribute_name:a_a_k a_attribute_value:a_a_v
@@ -388,7 +418,7 @@ block_content
 	;
 
 blockquote_tag
-	::= LT BLOCKQUOTE GT body_content:body_c LT SL BLOCKQUOTE {:RESULT = createContentNode(body_c);:}
+	::= LT BLOCKQUOTE GT body_content:body_c LT SL BLOCKQUOTE GT {:RESULT = createContentNode(body_c);:}
 	;
 
 br_tag

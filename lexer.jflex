@@ -66,7 +66,11 @@ Number     = [0-9]+
 HtmlComment = "<!--" {CommentContent} \*+ "-->"
 CommentContent = ( [^*] | \*+[^*/] )*
 Comment = {HtmlComment}
-
+Digit       = [0-9]
+Number      = [1-9][0-9]*
+Punctuation = [!\"#\$%&\'()\*\+\,\-\.\/:;<=>\?@\[\]\\\^_`{}\~]
+Character   = {Punctuation} | {Digit} | [A-Za-z]
+String      = {Character}+
 
 
 ident = ([:jletter:] | "" ) ([:jletterdigit:] | [:jletter:] | "" )*
@@ -81,7 +85,8 @@ ident = ([:jletter:] | "" ) ([:jletterdigit:] | [:jletter:] | "" )*
 %%  
 
     /* keywords: https://www.w3.org/TR/1998/NOTE-compactHTML-19980209/ */
-     <YYINITIAL> "DOCTYPE"            {return symbolFactory.newSymbol("DOCTYPE", DOCTYPE); }
+    <YYINITIAL> "DOCTYPE"            {return symbolFactory.newSymbol("DOCTYPE", DOCTYPE); }
+    <YYINITIAL> "="            {return symbolFactory.newSymbol("EQ", EQ); }
     <YYINITIAL> "<"            {return symbolFactory.newSymbol("LT", LT); }
     <YYINITIAL> ">"            {return symbolFactory.newSymbol("GT", GT); }
     <YYINITIAL> "/"            {return symbolFactory.newSymbol("SL", SL); }
@@ -194,14 +199,14 @@ ident = ([:jletter:] | "" ) ([:jletterdigit:] | [:jletter:] | "" )*
     <YYINITIAL> "XMP"           {return symbolFactory.newSymbol("XMP", XMP); }
     <YYINITIAL> "version"           {return symbolFactory.newSymbol("version", version); }
     <YYINITIAL> "href"           {return symbolFactory.newSymbol("href", href); }
-    
+
 
   /* comments */
   {Comment}                      { /* ignore */ }
 
   /* whitespace */
   {Whitespace} {                              }
-  
+ 
   
   // error fallback
 .|\n          { emit_warning("Unrecognized character '" +yytext()+"' -- ignored"); }

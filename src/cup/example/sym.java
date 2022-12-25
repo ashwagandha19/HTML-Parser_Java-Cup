@@ -29,11 +29,13 @@ public interface sym {
   public static final int SL = 110;
   public static final int KEYGEN = 55;
   public static final int SUP = 92;
+  public static final int title = 114;
   public static final int APPLET = 6;
   public static final int BLINK = 14;
   public static final int href = 112;
   public static final int SAMP = 81;
   public static final int ACRONYM = 4;
+  public static final int profile = 115;
   public static final int LT = 109;
   public static final int SUB = 91;
   public static final int FONT = 34;
@@ -49,6 +51,7 @@ public interface sym {
   public static final int VAR = 106;
   public static final int ADDRESS = 5;
   public static final int HTML = 46;
+  public static final int EQ = 117;
   public static final int EMBED = 32;
   public static final int ISINDEX = 53;
   public static final int EM = 31;
@@ -64,6 +67,7 @@ public interface sym {
   public static final int ABBR = 3;
   public static final int NOFRAMES = 70;
   public static final int LEGEND = 58;
+  public static final int style = 116;
   public static final int DT = 30;
   public static final int INPUT = 51;
   public static final int U = 103;
@@ -236,7 +240,11 @@ public interface sym {
   "SL",
   "version",
   "href",
-  "DOCTYPE"
+  "DOCTYPE",
+  "title",
+  "profile",
+  "style",
+  "EQ"
   };
 }
 
